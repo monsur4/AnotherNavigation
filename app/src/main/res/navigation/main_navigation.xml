@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/gameFragment"
         android:name="com.nav.anothernavigation.GameFragment"
-        android:label="fragment_game"
+        android:label="Game Fragment"
         tools:layout="@layout/fragment_game" >
         <action
             android:id="@+id/action_gameFragment_to_resultFragment2"
@@ -22,7 +22,7 @@
     <fragment
         android:id="@+id/resultFragment"
         android:name="com.nav.anothernavigation.ResultFragment"
-        android:label="fragment_result"
+        android:label="Result Fragment"
         tools:layout="@layout/fragment_result" >
         <argument
             android:name="myArg"
@@ -32,6 +32,6 @@
     <fragment
         android:id="@+id/aboutUsFragment"
         android:name="com.nav.anothernavigation.aboutUsFragment"
-        android:label="fragment_about_us"
+        android:label="About Us Fragment"
         tools:layout="@layout/fragment_about_us" />
 </navigation>

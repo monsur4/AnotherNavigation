@@ -2,6 +2,7 @@ package com.nav.anothernavigation;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -33,17 +34,27 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph())
-                //.setDrawerLayout(drawerLayout)
+                //.setDrawerLayout(drawerLayout) is deprecated
                 .setOpenableLayout(drawerLayout)
                 .build();
 
-        // NavigationUI.setupWithNavController(navigationView, navController); --> doesn't show drawer icon
 
-        /*---both methods below show the drawer icon, but without the onSupportNavigateUpMethod, the icon doesn't click*/
-        // NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration); ==> works
-        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
+        /*---in general, when adding navigation support to the default actionbar, you'd need to
+        i. call NavigationUI.setupActionBarWithNavController() in onCreate()
+        ii. then override onSupportNavigateUp()---*/
 
-        // navigationView.setupWithNavController(, navController);
+        /*Connects the actionbar to the navController*/
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        //NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
+
+        /*Connects the navigationView to the navController, so that clicking on navigation view items
+        links to the appropriate destination*/
+        NavigationUI.setupWithNavController(navigationView, navController);
+
+
+        /* When using a custom toolbar and not the default actionbar, setup up the toolbar with the
+         navigation controller as follows: */
+        // NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
     }
 
     @Override
@@ -58,14 +69,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /*------without adding this method, the drawer and back icons don't work-----*/
+    /*------without overriding this method, the drawer and back icons don't work-----*/
+    /*---when using the appbar with the navigation component,
+    as in NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);,
+     you have to override onSupportNavigateUP() to handle up navigation*/
     @Override
     public boolean onSupportNavigateUp() {
-        // the arrow back button works but the drawer icon button doesn't work
-        // return navController.navigateUp();
-
-        // both the arrow back and the drawer icon buttons work
-        return NavigationUI.navigateUp(navController, drawerLayout);
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
 
 }
